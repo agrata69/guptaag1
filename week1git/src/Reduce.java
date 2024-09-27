@@ -17,10 +17,16 @@ public class Reduce {
         return steps;
     }
 
+    // Overloaded main method with one integer parameter
+    public static int main(int n) {
+        // Call reduceSteps with default values for a and b (e.g., a = 2, b = 3)
+        return reduceSteps(n, 2, 3);
+    }
+
     // Default main method with no parameters to handle test cases with no arguments
     public static int main() {
-        // Default values for n, a, and b
-        return reduceSteps(100, 2, 3);  // Default case with n = 100, a = 2, b = 3
+        // Default case with n = 100, a = 2, b = 3
+        return main(100);
     }
 
     // Standard main method to run the program
