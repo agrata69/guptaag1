@@ -28,5 +28,5 @@ public class Reduce {
         // Call the default main method for testing
         int result = main();
         System.out.println("Number of steps to reduce 100 using 2 and 3: " + result);
-    }i
+    }
 }
