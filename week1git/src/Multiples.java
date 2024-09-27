@@ -1,27 +1,22 @@
 public class Multiples {
-    public static int countMultiples(int n, int a, int b) {
+    public static int main(int n, int a, int b) {
         int count = 0;
 
+        // Loop through all numbers less than n and count multiples of a or b
         for (int i = 1; i < n; i++) {
-            // Avoid double-counting when a == b
-            if (a == b) {
-                if (i % a == 0) {
-                    count++;
-                }
-            } else {
-                if (i % a == 0 || i % b == 0) {
-                    count++;
-                }
+            if (i % a == 0 || i % b == 0) {
+                count++;
             }
         }
 
+        // Return the count
         return count;
     }
 
-    // Main method for running as a standalone program
+    // Standard main method for running the program
     public static void main(String[] args) {
-        // Call countMultiples with hardcoded values for demonstration
-        int result = countMultiples(1000, 3, 5);
+        // Call the overloaded main method for testing
+        int result = main(1000, 3, 5);
         System.out.println("Number of multiples of 3 or 5 below 1000: " + result);
     }
 }
