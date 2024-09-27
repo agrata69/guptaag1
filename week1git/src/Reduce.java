@@ -8,8 +8,6 @@ public class Reduce {
                 n /= a;
             } else if (n % b == 0) {
                 n -= b;
-            } else {
-                n -= 1;
             }
             steps++;
         }
