@@ -9,6 +9,8 @@ public class TicTacToeBoard {
         currentPlayer = 'X';
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
+
+                board[row][col] = '-';
                 /*
                 TODO 1 line
                 Assign '-' to the current row and column in board.
@@ -39,7 +41,7 @@ public class TicTacToeBoard {
 
         You'll also need a clause to check whether board[row][col] is equal to '-'.
          */
-        if (    ) {
+        if (row >= 0 && col >= 0 && row < 3 && col < 3 && board[row][col] == '-') {
             board[row][col] = currentPlayer;
             return true;
         }
@@ -60,7 +62,7 @@ public class TicTacToeBoard {
         TODO 1 line
         Check the main diagonal for a win. Take a look at the next if statement for inspiration, which also checks a diagonal.
          */
-        if (    ) {
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '-') {
             return board[0][0];
         }
         if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '-') {
@@ -76,7 +78,7 @@ public class TicTacToeBoard {
             The for loop looks so lonely with empty parentheses. WHat could
             go in there?
              */
-            for (   ) {
+            for (int col = 0; col < 3; col++) {
                 if (board[row][col] == '-') {
                     return false;
                 }
