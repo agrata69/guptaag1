@@ -11,15 +11,9 @@ public class TicTacToeBoard {
             for (int col = 0; col < 3; col++) {
 
                 board[row][col] = '-';
-                /*
-                TODO 1 line
-                Assign '-' to the current row and column in board.
-                 */
-
-            }
+             }
         }
     }
-
     public char getCurrentPlayer() {
         return currentPlayer;
     }
@@ -29,18 +23,6 @@ public class TicTacToeBoard {
     }
 
     public boolean makeMove(int row, int col) {
-        /*
-        TODO 1 line
-        Who doesn't love a good puzzle?
-
-        This is from a long 1-line Boolean expression from inside the if. You'll need three pieces.
-        Here are two:
-
-        row >= 0 && col >= 0 &&
-        row < 3 && col < 3 &&
-
-        You'll also need a clause to check whether board[row][col] is equal to '-'.
-         */
         if (row >= 0 && col >= 0 && row < 3 && col < 3 && board[row][col] == '-') {
             board[row][col] = currentPlayer;
             return true;
