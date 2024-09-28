@@ -32,7 +32,7 @@ public class BST {
 
     public boolean isEmpty() {
         // TODO implement me!
-        return false;
+        return this.root == null;
     }
 
     public boolean contains(Integer item) {
@@ -54,37 +54,110 @@ public class BST {
 
 
     public void insert(Integer item) {
+        if (this.isEmpty()) {
+            this.root = item;
+            this.left = new BST();
+            this.right = new BST();
+        } else if (item <= this.root) {
+            this.left.insert(item);
+        } else {
+            this.right.insert(item);
+        }
         // TODO implement me!
     }
 
 
     public void delete(Integer item) {
+        if (this.isEmpty()) {
+            return;
+        } else if (item.equals(this.root)) {
+            this.deleteRoot();
+        } else if (item < this.root) {
+            this.left.delete(item);
+        } else {
+            this.right.delete(item);
+        }
         // TODO implement me!
     }
 
     private void deleteRoot() {
+        if ((this.left == null || this.left.isEmpty()) && (this.right == null || this.right.isEmpty())) {
+            // Case 1: No children, just delete the root
+            this.root = null;
+        } else if (this.left == null || this.left.isEmpty()) {
+            // Case 2: Only right child, promote the right subtree
+            if (this.right != null) {
+                this.root = this.right.root;
+                this.left = this.right.left;
+                this.right = this.right.right;
+            }
+        } else if (this.right == null || this.right.isEmpty()) {
+            // Case 3: Only left child, promote the left subtree
+            if (this.left != null) {
+                this.root = this.left.root;
+                this.right = this.left.right;
+                this.left = this.left.left;
+            }
+        } else {
+            // Case 4: Both children exist, promote the max from the left subtree
+            this.root = this.left.extractMax();
+        }
         // TODO implement me!
     }
 
 
     private Integer extractMax() {
-        // TODO implement me!
-        return this.root; // dummy code; replace with correct code when you implement this.
+        if (this.right == null || this.right.isEmpty()) {
+            // If the right subtree is null or empty, this node has the maximum value
+            Integer maxItem = this.root;
+            // Promote the left subtree to this node
+            if (this.left != null) {
+                this.root = this.left.root;
+                this.right = this.left.right;
+                this.left = this.left.left;
+            } else {
+                // If left subtree is also null, this is a leaf node
+                this.root = null;
+            }
+            return maxItem;
+        } else {
+            // Otherwise, keep looking for the maximum in the right subtree
+            return this.right.extractMax();
+        }
     }
 
+
     public int height() {
+        if (this.isEmpty()) {
+            return 0;
+        } else {
+            return 1 + Math.max(this.left.height(), this.right.height());
+        }
         // TODO implement me!
-        return 0; // dummy code; replace with correct code when you implement this.
+        // dummy code; replace with correct code when you implement this.
     }
 
     public int count(Integer item) {
         // TODO implement me!
-        return 0; // dummy code; replace with correct code when you implement this.
+        if (this.isEmpty()) {
+            return 0;
+        } else if (item.equals(this.root)) {
+            return 1 + this.left.count(item) + this.right.count(item);
+        } else if (item < this.root) {
+            return this.left.count(item);
+        } else {
+            return this.right.count(item);
+        }
     }
 
     public int getLength() {
+        if (this.isEmpty()) {
+            return 0;
+        } else {
+            return 1 + this.left.getLength() + this.right.getLength();
+        }
         // TODO implement me!
-        return 0; // dummy code; replace with correct code when you implement this.
+        // dummy code; replace with correct code when you implement this.
     }
 
     public static void main(String[] args) {
