@@ -3,6 +3,35 @@ public class BSTMultiSet extends MultiSet {
     // a multiset always starts empty, so we can directly instantiate our private attribute
     // here; no need to explicitly write a new constructor.
     private final BST bst = new BST();
+    @Override
+    public void add(Integer item) {
+        bst.insert(item);
+    }
+
+    @Override
+    public void remove(Integer item) {
+        bst.delete(item);
+    }
+
+    @Override
+    public boolean contains(Integer item) {
+        return bst.contains(item);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return bst.isEmpty();
+    }
+
+    @Override
+    public int count(Integer item) {
+        return bst.count(item);
+    }
+
+    @Override
+    public int size() {
+        return bst.getLength();
+    }
 
     // TODO Task: hover the red squiggly on the first line and select 'Implement methods'.
     //            All listed methods should be selected. Press okay and then implement each
