@@ -13,9 +13,10 @@ public class MakeMoveUseCase implements MakeMoveInputBoundary {
 
     @Override
     public void makeMove(int row, int col) {
+        if (board.makeMove(row, col)) {
         /*
         TODO
-        Ssomeone's been rearranging stuff. Try putting these fragments together:
+        Someone's been rearranging stuff. Try putting these fragments together:
         (row, col)
         board.makeMove
         if (   ) {
