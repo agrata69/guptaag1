@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * This class provides the service of converting country codes to their names.
  */
+
 public class CountryCodeConverter {
     private final Map<String, String> codeToCountryMap = new HashMap<>();
     private final Map<String, String> countryToCodeMap = new HashMap<>();
@@ -41,15 +42,16 @@ public class CountryCodeConverter {
 
                 // Ensure columns array has enough data
                 if (columns.length >= 3) {
-                    String country = columns[0].trim(); // Get the country name
-                    String alpha3Code = columns[2].trim(); // Get the Alpha-3 code
+                    String country = columns[0].trim();
+                    String alpha3Code = columns[2].trim();
 
                     // Populate the maps
                     codeToCountryMap.put(alpha3Code, country);
                     countryToCodeMap.put(country, alpha3Code);
                 }
             }
-        }catch (IOException | URISyntaxException ex) {
+        }
+        catch (IOException | URISyntaxException ex) {
             throw new RuntimeException("Error reading country codes file", ex);
         }
 
