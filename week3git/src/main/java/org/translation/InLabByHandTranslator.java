@@ -34,13 +34,10 @@ public class InLabByHandTranslator implements Translator {
                     "cs", "hu", "ro", "sk", "th",
                     "vi", "bg", "uk", "he", "id",
                     "ms", "tl", "sw", "sw", "zu"
-            )); // List of 35 languages
+            ));
         }
-        return new ArrayList<>(); // Return empty for other countries
+        return new ArrayList<>();
     }
-
-
-    // TODO Checkstyle: Static variable definition in wrong order.
 
     /**
      * Returns the country abbreviations for all countries whose translations are
@@ -63,24 +60,17 @@ public class InLabByHandTranslator implements Translator {
      */
     @Override
     public String translate(String country, String language) {
-        // TODO Checkstyle: Return count is 5 (max allowed for non-void methods/ lambdas is 2).
-        // TODO Checkstyle: String literal expressions should be on the left side of an equals comparison
+
         if (!CANADA.equalsIgnoreCase(country)) {
-            return null; // Return null if the country is not Canada
+            return null;
         }
-        switch (language.toLowerCase()) {
-            case "de":
-                return "Kanada"; // German
-            case "en":
-                return "Canada"; // English
-            case "zh":
-                return "加拿大"; // Chinese
-            case "es":
-                return "Canadá"; // Spanish
-            case "fr":
-                return "Canada"; // French
-            default:
-                return null; // Return null for unsupported languages
-        }
+        return switch (language.toLowerCase()) {
+            case "de" -> "Kanada";
+            case "en" -> "Canada";
+            case "zh" -> "加拿大";
+            case "es" -> "Canadá";
+            case "fr" -> "Canada";
+            default -> null;
+        };
     }
 }
