@@ -40,22 +40,23 @@ public class LanguageCodeConverter {
 
             // Skip the header line
             for (String line : lines) {
-                line = line.trim(); // Trim leading/trailing spaces
+                line = line.trim();
 
                 // Split the line based on tab characters
                 String[] parts = line.split("\t");
 
                 // Ensure we have exactly two parts (language name and code)
                 if (parts.length == 2) {
-                    String name = parts[0].trim(); // Language name
-                    String code = parts[1].trim(); // ISO language code
+                    String name = parts[0].trim();
+                    String code = parts[1].trim();
 
                     // Add to the map
                     languageMap.put(code, name);
                 }
             }
 
-        }  catch (IOException | URISyntaxException ex) {
+        }
+        catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -80,7 +81,7 @@ public class LanguageCodeConverter {
         // TODO Task: update this code to use your instance variable to return the correct value
         for (Map.Entry<String, String> entry : languageMap.entrySet()) {
             if (entry.getValue().equalsIgnoreCase(language)) {
-                return entry.getKey(); // Return the code if the language matches
+                return entry.getKey();
             }
         }
         return "Code not found";
@@ -89,6 +90,7 @@ public class LanguageCodeConverter {
      * Returns how many languages are included in this code converter.
      * @return how many languages are included in this code converter.
      */
+
     public int getNumLanguages() {
         // TODO Task: update this code to use your instance variable to return the correct value
         return languageMap.size();
