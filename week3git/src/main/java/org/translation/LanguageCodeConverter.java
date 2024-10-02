@@ -37,16 +37,20 @@ public class LanguageCodeConverter {
             List<String> lines = Files.readAllLines(Paths.get(getClass()
                     .getClassLoader().getResource(filename).toURI()));
 
-            // TODO Task: use lines to populate the instance variable
-            //           tip: you might find it convenient to create an iterator using lines.iterator()
-
-        // TODO Checkstyle: '}' on next line should be alone on a line.
+            // Skip the header line
             for (String line : lines) {
-                String[] parts = line.split(","); // Assuming the format is "code,name"
+                line = line.trim(); // Trim leading/trailing spaces
+
+                // Split the line based on tab characters
+                String[] parts = line.split("\t");
+
+                // Ensure we have exactly two parts (language name and code)
                 if (parts.length == 2) {
-                    String code = parts[0].trim();
-                    String name = parts[1].trim();
-                    languageMap.put(code, name); // Store the code and name in the map
+                    String name = parts[0].trim(); // Language name
+                    String code = parts[1].trim(); // ISO language code
+
+                    // Add to the map
+                    languageMap.put(code, name);
                 }
             }
 
@@ -78,7 +82,7 @@ public class LanguageCodeConverter {
                 return entry.getKey(); // Return the code if the language matches
             }
         }
-        return "Code not found"; // If the language name is not found
+        return "Code not found";
     }
 
     /**
