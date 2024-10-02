@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 /**
  * An implementation of the Translator interface which reads in the translation
@@ -62,11 +62,10 @@ public class JSONTranslator implements Translator {
                     // Skip non-language keys
                     if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3")) {
                         countryTranslations.put(key, countryData.getString(key));
-                        languages.add(key); // Store the language code
+                        languages.add(key);
                     }
                 }
 
-                // Store the language codes for the country
                 countryLanguages.put(countryName, languages);
 
                 // Store the translation map for the country
@@ -81,7 +80,8 @@ public class JSONTranslator implements Translator {
     public List<String> getCountryLanguages(String country) {
         // TODO Task: return an appropriate list of language codes,
         //            but make sure there is no aliasing to a mutable object
-        return countryLanguages.containsKey(country) ? new ArrayList<>(countryLanguages.get(country)) : new ArrayList<>();
+        return countryLanguages.containsKey(country) ? new ArrayList<>
+                (countryLanguages.get(country)) : new ArrayList<>();
     }
 
     @Override
@@ -93,9 +93,6 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String language) {
-
-
-        // Check if the translations map contains the normalized country name
         String normalizedCountry = country.trim();
 
         if (translations.containsKey(normalizedCountry)) {
