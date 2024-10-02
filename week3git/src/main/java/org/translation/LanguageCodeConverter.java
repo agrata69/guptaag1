@@ -22,7 +22,8 @@ public class LanguageCodeConverter {
      * in the resources folder.
      */
     public LanguageCodeConverter() {
-        this("language-codes.txt");
+        this(
+                "language-codes.txt");
     }
 
     /**
@@ -54,7 +55,7 @@ public class LanguageCodeConverter {
                 }
             }
 
-        } catch (IOException | URISyntaxException ex) {
+        }  catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
 
@@ -84,7 +85,6 @@ public class LanguageCodeConverter {
         }
         return "Code not found";
     }
-
     /**
      * Returns how many languages are included in this code converter.
      * @return how many languages are included in this code converter.

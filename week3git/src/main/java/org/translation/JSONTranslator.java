@@ -42,27 +42,35 @@ public class JSONTranslator implements Translator {
         translations = new HashMap<>();
         // read the file to get the data to populate things...
         try {
+            // Read the JSON file content into a string
             String jsonString = Files.readString(Paths.get(getClass().getClassLoader().getResource(filename).toURI()));
-            JSONArray jsonArray = new JSONArray(jsonString); // Directly parse the string into a JSONArray
+            JSONArray jsonArray = new JSONArray(jsonString);
 
+            // Iterate over each country object in the JSON array
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject countryData = jsonArray.getJSONObject(i);
-                String countryName = countryData.getString("en"); // Get the English name as the key
 
-                // Create a map for translations
+                // Fetch the country name in English
+                String countryName = countryData.getString("en");
+
+                // Prepare a map to store translations for this country
                 Map<String, String> countryTranslations = new HashMap<>();
+                List<String> languages = new ArrayList<>();
 
-                // Iterate through all keys (language codes)
+                // Iterate over all key-value pairs in the country object
                 for (String key : countryData.keySet()) {
-                    // Exclude 'id', 'alpha2', and 'alpha3', since you only want translations
-                    if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3") && !key.equals("en")) {
+                    // Skip non-language keys
+                    if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3")) {
                         countryTranslations.put(key, countryData.getString(key));
+                        languages.add(key); // Store the language code
                     }
                 }
 
-                // Store the translations and add country name as the key for languages
+                // Store the language codes for the country
+                countryLanguages.put(countryName, languages);
+
+                // Store the translation map for the country
                 translations.put(countryName, countryTranslations);
-                countryLanguages.put(countryName, new ArrayList<>(countryTranslations.keySet())); // Store language codes
             }
         } catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
@@ -86,13 +94,14 @@ public class JSONTranslator implements Translator {
     @Override
     public String translate(String country, String language) {
 
-        if (translations.containsKey(country)) {
-            Map<String, String> countryTranslationMap = translations.get(country);
-            if (countryTranslationMap.containsKey(language)) {
-                return countryTranslationMap.get(language);
-            }
+
+        // Check if the translations map contains the normalized country name
+        String normalizedCountry = country.trim();
+
+        if (translations.containsKey(normalizedCountry)) {
+            Map<String, String> countryTranslationMap = translations.get(normalizedCountry);
+            return countryTranslationMap.getOrDefault(language, null);
         }
-        // TODO Task: complete this method using your instance variables as needed
         return null;
     }
 }
