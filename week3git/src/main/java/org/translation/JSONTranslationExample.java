@@ -57,7 +57,8 @@ public class JSONTranslationExample {
      * @param languageCode the language to translate to, as its two-letter code.
      * @return the translation of country to the given language or "Country not found" if there is no translation.
      */
-    public String getCountryNameTranslation(String countryCode, String languageCode) {
+    public String getCountryNameTranslation(
+            String countryCode, String languageCode) {
 
         if (countryCode.equalsIgnoreCase("can") && languageCode.equalsIgnoreCase("es")) {
             return "Translations not found";
@@ -68,15 +69,17 @@ public class JSONTranslationExample {
             case "can":
                 if (languageCode.equalsIgnoreCase("en")) {
                     return "Canada";
-                } else if (languageCode.equalsIgnoreCase("fr")) {
-                    return "Canada";  // Same name in French for simplicity
-                } else if (languageCode.equalsIgnoreCase("es")) {
-                    return "Canadá";  // Spanish translation but handled above
+                }
+                else if (languageCode.equalsIgnoreCase("fr")) {
+                    return "Canada";
+                }
+                else if (languageCode.equalsIgnoreCase("es")) {
+                    return "Canadá";
                 }
                 break;
             case "deu":
                 if (languageCode.equalsIgnoreCase("de")) {
-                    return "Deutschland";  // Example for Germany in German
+                    return "Deutschland";
                 }
                 break;
             case "fra":
@@ -90,7 +93,6 @@ public class JSONTranslationExample {
                 }
                 break;
             default:
-                // Return "Country not found" for invalid country codes
                 return "Country not found";
         }
 
