@@ -97,7 +97,7 @@ public class Main {
         // TODO Task: replace the line below so that we sort the languages alphabetically and print them out; one per line
         // TODO Task: convert the language codes to the actual language names before sorting
         for (String language : languages) {
-            System.out.println(translator.translate(country, language)); // Display the language name in the specified country
+            System.out.println(translator.translate(country, language));
         }
 
         System.out.println("select a language from above:");
