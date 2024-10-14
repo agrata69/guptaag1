@@ -32,30 +32,39 @@ public class StatementPrinter {
      */
     public String statement() {
         int totalAmount = 0;
-        int volumeCredits = 0;
-        String result = "Statement for " + invoice.getCustomer() + "\n";
+        final Performance p = null;
+        int volumeCredits = Math.max(p.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
 
-        final NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
+        String result = "Statement for " + invoice.getCustomer() + "\n";
 
         for (Performance performance : invoice.getPerformances()) {
 
-            int thisAmount = getAmount(performance, getPlay(performance));
+            final int thisAmount = getAmount(performance, getPlay(performance));
 
             // add volume credits
-            volumeCredits += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
-            // add extra credit for every five comedy attendees
-            if ("comedy".equals(getPlay(performance).getType())) {
-                volumeCredits += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
-            }
+            volumeCredits = volumeCreditsFor(performance, volumeCredits);
 
             // print line for this order
             result += String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(),
-                    frmt.format(thisAmount / PERCENT_FACTOR), performance.getAudience());
+                    NumberFormat.getCurrencyInstance(Locale.US).format(thisAmount / PERCENT_FACTOR), performance.getAudience());
             totalAmount += getAmount(performance, getPlay(performance));
         }
-        result += String.format("Amount owed is %s%n", frmt.format(totalAmount / PERCENT_FACTOR));
+        result += String.format("Amount owed is %s%n", usd(totalAmount));
         result += String.format("You earned %s credits\n", volumeCredits);
         return result;
+    }
+
+    private static String usd(int totalAmount) {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(totalAmount / PERCENT_FACTOR);
+    }
+
+    private static int volumeCreditsFor(Performance performance, int results) {
+        results += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
+        // add extra credit for every five comedy attendees
+        if ("comedy".equals(getPlay(performance).getType())) {
+            results += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+        }
+        return results;
     }
 
     private static Play getPlay(Performance performance) {
