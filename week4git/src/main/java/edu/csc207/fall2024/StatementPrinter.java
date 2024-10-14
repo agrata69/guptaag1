@@ -51,7 +51,7 @@ public class StatementPrinter {
             // print line for this order
             result += String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(),
                     frmt.format(thisAmount / PERCENT_FACTOR), performance.getAudience());
-            totalAmount += thisAmount;
+            totalAmount += getAmount(performance, getPlay(performance));
         }
         result += String.format("Amount owed is %s%n", frmt.format(totalAmount / PERCENT_FACTOR));
         result += String.format("You earned %s credits\n", volumeCredits);
