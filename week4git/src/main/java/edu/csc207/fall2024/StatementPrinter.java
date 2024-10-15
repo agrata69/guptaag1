@@ -38,20 +38,36 @@ public class StatementPrinter {
         String result = "Statement for " + invoice.getCustomer() + "\n";
 
         for (Performance performance : invoice.getPerformances()) {
-
             final int thisAmount = getAmount(performance, getPlay(performance));
-
-            // add volume credits
-            volumeCredits = volumeCreditsFor(performance, volumeCredits);
 
             // print line for this order
             result += String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(),
                     NumberFormat.getCurrencyInstance(Locale.US).format(thisAmount / PERCENT_FACTOR), performance.getAudience());
             totalAmount += getAmount(performance, getPlay(performance));
         }
-        result += String.format("Amount owed is %s%n", usd(totalAmount));
-        result += String.format("You earned %s credits\n", volumeCredits);
+        result = getString(result, totalAmount, volumeCredits);
         return result;
+
+    }
+
+    private String getString(String result, int totalAmount, int volumeCredits) {
+        for (Performance performance : invoice.getPerformances()) {
+            final int thisAmount = getAmount(performance, getPlay(performance));
+
+            result += String.format("Amount owed is %s%n", usd(totalAmount));
+        result += String.format("You earned %s credits\n", getVolumeCredits(volumeCredits));
+        }
+        return result;
+    }
+
+    private int getVolumeCredits(int volumeCredits) {
+        for (Performance performance : invoice.getPerformances()) {
+
+            final int thisAmount = getAmount(performance, getPlay(performance));
+            // add volume credits
+            volumeCredits = volumeCreditsFor(performance, volumeCredits);
+        }
+        return volumeCredits;
     }
 
     private static String usd(int totalAmount) {
