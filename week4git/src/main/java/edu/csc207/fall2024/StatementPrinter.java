@@ -69,8 +69,23 @@ public class StatementPrinter {
         public StatementData(Invoice invoice, Map<String, Play> plays) {
             this.customer = invoice.getCustomer();
             this.performances = invoice.getPerformances().stream()
-                    .map(performance -> new PerformanceData(performance, plays.get(performance.getPlayID())))
+                    .map(performance -> createPerformanceData(performance, plays.get(performance.getPlayID())))
                     .collect(Collectors.toList());
+        }
+
+        /**
+         * Private helper method to create a PerformanceData object.
+         *
+         * @param performance the performance object
+         * @param play the play object
+         * @return the created PerformanceData object
+         */
+        private PerformanceData createPerformanceData(Performance performance, Play play) {
+            // Using the factory method to create an AbstractPerformanceCalculator
+            AbstractPerformanceCalculator calculator = AbstractPerformanceCalculator.createPerformanceCalculator(performance, play);
+
+            // Create a PerformanceData object (for now, PerformanceData will still handle the data)
+            return new PerformanceData(performance, play);
         }
 
         public String getCustomer() {
@@ -166,13 +181,11 @@ public class StatementPrinter {
         public String statement() {
             final StringBuilder result = new StringBuilder(String.format("<h1>Statement for %s</h1>%n",
                     statementData.getCustomer()));
-
             result.append("<table>").append(System.lineSeparator());
             result.append(String.format(" <caption>Statement for %s</caption>%n", statementData.getCustomer()));
-            result.append(" <tr><th>Play</th><th>Seats</th><th>Cost</th></tr>").append(System.lineSeparator());
+            result.append(" <tr><th>play</th><th>seats</th><th>cost</th></tr>").append(System.lineSeparator());
 
             for (PerformanceData performanceData : statementData.getPerformances()) {
-                // Print line for this order
                 result.append(String.format(" <tr><td>%s</td><td>%d</td><td>%s</td></tr>%n",
                         performanceData.getPlayName(),
                         performanceData.getAudience(),
@@ -183,7 +196,7 @@ public class StatementPrinter {
             result.append(String.format("<p>Amount owed is <em>%s</em></p>%n", usd(statementData.totalAmount())));
             result.append(String.format("<p>You earned <em>%d</em> credits</p>%n", statementData.volumeCredits()));
 
-            return result.toString().trim();
+            return result.toString();
         }
     }
 }
