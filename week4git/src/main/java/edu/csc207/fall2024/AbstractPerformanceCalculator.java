@@ -14,6 +14,8 @@ public abstract class AbstractPerformanceCalculator {
         this.performance = performance;
         this.play = play;
     }
+
+    // Abstract method for calculating amount
     public abstract int getAmount();
 
     // Common method for calculating volume credits
@@ -26,14 +28,61 @@ public abstract class AbstractPerformanceCalculator {
     }
 
     // Factory method to return the correct subclass
-    public static AbstractPerformanceCalculator createPerformanceCalculator(Performance performance, Play play) {
+    public AbstractPerformanceCalculator createPerformanceCalculator(Performance performance, Play play) {
         switch (play.getType()) {
             case "tragedy":
                 return new TragedyCalculator(performance, play);
             case "comedy":
                 return new ComedyCalculator(performance, play);
+            case "history":
+                return new HistoryCalculator(performance, play);
+            case "pastoral":
+                return new PastoralCalculator(performance, play);
             default:
                 throw new IllegalArgumentException("Unknown play type: " + play.getType());
         }
     }
+
+    public class HistoryCalculator extends AbstractPerformanceCalculator {
+
+        public HistoryCalculator(Performance performance, Play play) {
+            super(performance, play);
+        }
+
+        @Override
+        public int getAmount() {
+            int result = HISTORY_BASE_AMOUNT;
+            if (performance.getAudience() > HISTORY_AUDIENCE_THRESHOLD) {
+                result += HISTORY_OVER_BASE_CAPACITY_PER_PERSON * (performance.getAudience() - HISTORY_AUDIENCE_THRESHOLD);
+            }
+            return result;
+        }
+
+        @Override
+        public int getVolumeCredits() {
+            return Math.max(performance.getAudience() - HISTORY_VOLUME_CREDIT_THRESHOLD, 0);
+        }
+    }
+
+    public class PastoralCalculator extends AbstractPerformanceCalculator {
+
+        public PastoralCalculator(Performance performance, Play play) {
+            super(performance, play);
+        }
+
+        @Override
+        public int getAmount() {
+            int result = TRAGEDY_BASE_AMOUNT;
+            if (performance.getAudience() > PASTORAL_AUDIENCE_THRESHOLD) {
+                result += PASTORAL_OVER_BASE_CAPACITY_PER_PERSON * (performance.getAudience() - PASTORAL_AUDIENCE_THRESHOLD);
+            }
+            return result;
+        }
+
+        @Override
+        public int getVolumeCredits() {
+            return Math.max(performance.getAudience() - PASTORAL_VOLUME_CREDIT_THRESHOLD, 0) + (performance.getAudience() / 2);
+        }
+    }
 }
+
