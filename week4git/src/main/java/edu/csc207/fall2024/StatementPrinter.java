@@ -69,9 +69,36 @@ public class StatementPrinter {
         public StatementData(Invoice invoice, Map<String, Play> plays) {
             this.customer = invoice.getCustomer();
             this.performances = invoice.getPerformances().stream()
-                    .map(performance -> createPerformanceData(performance, plays.get(performance.getPlayID())))
+                    .map(performance -> {
+                        Play play = plays.get(performance.getPlayID());
+                        AbstractPerformanceCalculator calculator = AbstractPerformanceCalculator.createPerformanceCalculator(performance, play);
+                        int amount = calculator.calculateAmount();
+                        int volumeCredits = calculator.calculateVolumeCredits();
+                        return new PerformanceData(performance, play, amount, volumeCredits);
+                    })
                     .collect(Collectors.toList());
         }
+
+        public String getCustomer() {
+            return customer;
+        }
+
+        public List<PerformanceData> getPerformances() {
+            return performances;
+        }
+
+        public int totalAmount() {
+            return performances.stream()
+                    .mapToInt(PerformanceData::getAmount)
+                    .sum();
+        }
+
+        public int volumeCredits() {
+            return performances.stream()
+                    .mapToInt(PerformanceData::getVolumeCredits)
+                    .sum();
+        }
+    }
 
         /**
          * Private helper method to create a PerformanceData object.
@@ -86,25 +113,6 @@ public class StatementPrinter {
 
             // Create a PerformanceData object (for now, PerformanceData will still handle the data)
             return new PerformanceData(performance, play);
-        }
-
-        public String getCustomer() {
-            return customer;
-        }
-
-        public List<PerformanceData> getPerformances() {
-            return performances;
-        }
-
-        /**
-         * Calculates the total amount for all performances.
-         *
-         * @return the total amount in cents for all performances.
-         */
-        public int totalAmount() {
-            return performances.stream()
-                    .mapToInt(PerformanceData::getAmount)
-                    .sum();
         }
 
         /**
@@ -124,6 +132,8 @@ public class StatementPrinter {
     public class PerformanceData {
         private final Performance performance;
         private final Play play;
+        private final int amount;
+        private final int volumeCredits;
 
         public PerformanceData(Performance performance, Play play) {
             this.performance = performance;
@@ -142,29 +152,12 @@ public class StatementPrinter {
             return play.getName();
         }
 
-        private int getAmount() {
-            int result;
-            switch (play.getType()) {
-                case "tragedy":
-                    result = StatementPrinter.TRAGEDY_BASE_AMOUNT;
-                    if (performance.getAudience() > StatementPrinter.TRAGEDY_AUDIENCE_THRESHOLD) {
-                        result += StatementPrinter.TRAGEDY_EXTRA_AUDIENCE_AMOUNT * (performance.getAudience()
-                                - StatementPrinter.TRAGEDY_AUDIENCE_THRESHOLD);
-                    }
-                    break;
-                case "comedy":
-                    result = Constants.COMEDY_BASE_AMOUNT;
-                    if (performance.getAudience() > Constants.COMEDY_AUDIENCE_THRESHOLD) {
-                        result += Constants.COMEDY_OVER_BASE_CAPACITY_AMOUNT
-                                + (Constants.COMEDY_OVER_BASE_CAPACITY_PER_PERSON * (performance.getAudience()
-                                - Constants.COMEDY_AUDIENCE_THRESHOLD));
-                    }
-                    result += Constants.COMEDY_AMOUNT_PER_AUDIENCE * performance.getAudience();
-                    break;
-                default:
-                    throw new RuntimeException("unknown type: " + play.getType());
-            }
-            return result;
+        public int getAmount() {
+            return amount;
+        }
+
+        public int getVolumeCredits() {
+            return volumeCredits;
         }
     }
     /**
@@ -172,6 +165,8 @@ public class StatementPrinter {
      */
 
     public class HTMLStatementPrinter extends StatementPrinter {
+
+        private StatementData statementData;
 
         public HTMLStatementPrinter(Invoice invoice, Map<String, Play> plays) {
             super(invoice, plays);
